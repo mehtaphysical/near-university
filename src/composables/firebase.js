@@ -1,7 +1,20 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { coursesCollection } from "../services/firebase";
+import { auth, coursesCollection } from "../services/firebase";
 import { fetchContent } from "../services/markdown";
+
+export const useSession = () => {
+  const user = ref();
+
+  onMounted(() => {
+    auth.onAuthStateChanged((session) => {
+      user.value = session;
+      console.log(session);
+    });
+  });
+
+  return user;
+};
 
 export const useCourses = () => {
   const courses = ref([]);
