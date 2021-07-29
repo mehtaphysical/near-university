@@ -1,26 +1,17 @@
 <template>
-  <div class="hello">
-    <ul>
-      <li v-for="course of courses" v-bind:key="course.id">
-        {{ course.title }}
-      </li>
-    </ul>
-  </div>
+  <div v-html="lesson" />
 </template>
 
 <script>
-import { useCourses } from "../composables/firebase";
+import { useLesson } from "../composables/firebase";
 
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String,
-  },
+  name: "Lesson",
   setup() {
-    const courses = useCourses();
+    const lesson = useLesson();
 
     return {
-      courses,
+      lesson,
     };
   },
 };

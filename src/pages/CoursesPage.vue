@@ -1,8 +1,10 @@
 <template>
   <div class="hello">
     <ul>
-      <li v-for="course of courses" v-bind:key="course.id">
-        {{ course.title }}
+      <li v-for="course of courses" :key="course.id">
+        <router-link :to="`/courses/${course.id}`">{{
+          course.title
+        }}</router-link>
       </li>
     </ul>
   </div>
@@ -12,10 +14,7 @@
 import { useCourses } from "../composables/firebase";
 
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String,
-  },
+  name: "CoursesPage",
   setup() {
     const courses = useCourses();
 
