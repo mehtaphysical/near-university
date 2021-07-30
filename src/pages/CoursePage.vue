@@ -1,25 +1,29 @@
 <template>
-  <div class="hello">
-    <ul>
+  <div class="h-full grid grid-cols-8">
+    <ul class="block h-full p-4 bg-green-500 text-white">
       <li v-for="lesson of course.lessons" :key="lesson.title">
         <router-link :to="`/courses/${course.id}/lessons/${lesson.title}`">{{
           lesson.title
         }}</router-link>
       </li>
     </ul>
-    <router-view />
+    <section class="lesson col-span-7 p-4">
+      <Lesson />
+    </section>
   </div>
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import Lesson from "../components/Lesson.vue";
 import { useCourse } from "../composables/firebase";
 
 export default {
   name: "CoursesPage",
+  components: {
+    Lesson,
+  },
   setup() {
-    const { params } = useRoute();
-    const course = useCourse(params.id);
+    const course = useCourse();
 
     return {
       course,
@@ -27,21 +31,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

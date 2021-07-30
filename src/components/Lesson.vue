@@ -1,5 +1,7 @@
 <template>
-  <div v-html="lesson" />
+  <section v-if="lesson">
+    <div v-html="lesson.content" />
+  </section>
 </template>
 
 <script>

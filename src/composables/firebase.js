@@ -9,7 +9,6 @@ export const useSession = () => {
   onMounted(() => {
     auth.onAuthStateChanged((session) => {
       user.value = session;
-      console.log(session);
     });
   });
 
@@ -29,16 +28,17 @@ export const useCourses = () => {
   return courses;
 };
 
-export const useCourse = (id) => {
+export const useCourse = () => {
+  const route = useRoute();
   const course = ref({});
 
   const getCourse = async () => {
-    const doc = await coursesCollection.doc(id).get();
+    const doc = await coursesCollection.doc(route.params.id).get();
     course.value = { id: doc.id, ...doc.data() };
   };
 
   onMounted(getCourse);
-  watch([id], getCourse);
+  watch(() => route.params.id, getCourse);
 
   return course;
 };
@@ -46,14 +46,21 @@ export const useCourse = (id) => {
 export const useLesson = () => {
   const route = useRoute();
   const course = useCourse(route.params.id);
-  const content = ref("");
+  const lesson = ref();
 
   watch([course, () => route.params.title], async () => {
-    const lesson = course.value.lessons?.find(
-      (lesson) => lesson.title === route.params.title
-    );
-    if (lesson) content.value = await fetchContent(lesson.markdown);
+    const matchingLesson =
+      course.value.lessons.find(
+        (lesson) => lesson.title === route.params.title
+      ) || course.value.lessons[0];
+
+    if (matchingLesson) {
+      lesson.value = {
+        ...matchingLesson,
+        content: await fetchContent(matchingLesson.markdown),
+      };
+    }
   });
 
-  return content;
+  return lesson;
 };

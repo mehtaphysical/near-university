@@ -18,3 +18,4 @@ export const signin = () =>
 
 export const db = firebase.firestore();
 export const coursesCollection = db.collection("courses");
+export const completionsCollection = db.collection("completions");
